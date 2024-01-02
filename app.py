@@ -37,8 +37,6 @@ class MyTabs(ttk.Notebook):
         #pepiniere tab
         Pepiniere(self.pepiniere)
 
-#images
-
 
 class Pepiniere(ttk.Frame):
     def __init__(self,parent):
@@ -53,8 +51,16 @@ class Pepiniere(ttk.Frame):
 class PepiniereWeather(ttk.Frame):
     def __init__(self,parent):
         super().__init__(parent,bootstyle="info") 
-        self.grey_background=ttk.Label(self,background='#edf7f7')
-        self.grey_background.place(x=10,y=80,width=200,height=150)   
+        #weather data here
+        ttk.Label(self,background='black').place(x=10,y=80,width=200,height=160)
+        ttk.Label(self,text='temperature',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=90)
+        ttk.Label(self,text='humidity',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=120)
+        ttk.Label(self,text='pressure',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=150)
+        ttk.Label(self,text='wind speed',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=180)
+        ttk.Label(self,text='descreption',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=210) 
+        #search box goes here
+        ttk.Label(self,background='black').place(x=550,y=40,width=300,height=40)
+   
 
 
 
