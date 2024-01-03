@@ -1,4 +1,5 @@
 import ttkbootstrap as ttk
+from tkinter import Tk
 from ttkbootstrap.constants import *
 from PIL import Image,ImageTk
 from geopy.geocoders import Nominatim
@@ -59,7 +60,11 @@ class PepiniereWeather(ttk.Frame):
         ttk.Label(self,text='wind speed',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=180)
         ttk.Label(self,text='descreption',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=210) 
         #search box goes here
-        ttk.Label(self,background='black').place(x=550,y=40,width=300,height=40)
+        ttk.Label(self,background='black').place(x=550,y=40,width=400,height=45)
+        self.cloud=ttk.PhotoImage(file='images/cloud.png')
+        ttk.Label(self,background='black',image=self.cloud).place(x=555,y=40)
+        self.search_entry=ttk.Entry(self,font=('popins',11,'bold'),width=30,foreground='black',justify='center')
+        self.search_entry.place(x=630,y=47)
    
 
 
