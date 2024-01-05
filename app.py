@@ -51,7 +51,11 @@ class Pepiniere(ttk.Frame):
 
 class PepiniereWeather(ttk.Frame):
     def __init__(self,parent):
-        super().__init__(parent,bootstyle="info") 
+        super().__init__(parent,bootstyle="info")
+        ##ttk variables
+        self.city_var=ttk.StringVar()
+        self.timezone_var=ttk.StringVar()
+        self.long_lat_var=ttk.StringVar()
         #weather data here
         ttk.Label(self,background='black').place(x=10,y=80,width=200,height=160)
         ttk.Label(self,text='temperature',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=90)
@@ -63,9 +67,9 @@ class PepiniereWeather(ttk.Frame):
         ttk.Label(self,background='black').place(x=550,y=40,width=400,height=45)
         self.cloud=ttk.PhotoImage(file='images/cloud.png')
         ttk.Label(self,background='black',image=self.cloud).place(x=555,y=40)
-        ttk.Entry(self,font=('popins',11,'bold'),width=30,foreground='black',justify='center').place(x=630,y=47)
+        ttk.Entry(self,font=('popins',11,'bold'),width=30,textvariable=self.city_var,foreground='black',justify='center').place(x=630,y=47)
         self.search_icon=ttk.PhotoImage(file='images/search.png')
-        ttk.Button(self,image=self.search_icon,bootstyle='Dark',cursor='hand2').place(x=895,y=43)
+        ttk.Button(self,image=self.search_icon,bootstyle='Dark',cursor='hand2',command=self.getweather).place(x=895,y=43)
         # days stuff goes here 
         self.days_frame=ttk.Frame(self,bootstyle='Dark')
         self.rectangle_image=ttk.PhotoImage(file='images/rectangle.png')
@@ -81,8 +85,19 @@ class PepiniereWeather(ttk.Frame):
 
         # time a timezone 
         ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',20,'bold')).place(x=20,y=20)
-        ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',11)).place(x=100,y=30)
-        ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',11)).place(x=180,y=30)
+        ttk.Label(self,background="#17a2b8",font=('Helvitica',11),textvariable=self.timezone_var).place(x=100,y=30)
+        ttk.Label(self,background="#17a2b8",font=('Helvitica',11),textvariable=self.long_lat_var).place(x=220,y=30)
+        ##methodes 
+    def getweather(self):
+        city =self.city_var.get()
+        geolocator = Nominatim(user_agent='exercice')
+        location =geolocator.geocode(city)
+        timezone_=TimezoneFinder()
+        result=timezone_.timezone_at(lng=location.longitude,lat=location.latitude)
+        self.timezone_var.set(result)
+        self.long_lat_var.set(f'{round(location.latitude,4)} °N {round(location.longitude,4)} °W')
+
+
    
 
 
