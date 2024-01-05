@@ -1,5 +1,5 @@
 import ttkbootstrap as ttk
-from tkinter import Tk
+import tkintermapview
 from ttkbootstrap.constants import *
 from PIL import Image,ImageTk
 from geopy.geocoders import Nominatim
@@ -47,7 +47,9 @@ class Pepiniere(ttk.Frame):
         self.rowconfigure(0,weight=1)
         self.rowconfigure(1,weight=1)
         PepiniereWeather(self).grid(column=0,row=0,sticky='nsew',columnspan=2)
+        MapPepiniere(self).grid(column=0,row=1,sticky='nsew',columnspan=2)
         self.pack(fill=BOTH,expand=True )
+        
 
 class PepiniereWeather(ttk.Frame):
     def __init__(self,parent):
@@ -83,18 +85,6 @@ class PepiniereWeather(ttk.Frame):
         ttk.Entry(self,font=('popins',11,'bold'),width=30,textvariable=self.city_var,foreground='black',justify='center').place(x=630,y=47)
         self.search_icon=ttk.PhotoImage(file='images/search.png')
         ttk.Button(self,image=self.search_icon,bootstyle='Dark',cursor='hand2',command=self.getweather).place(x=895,y=43)
-        # days stuff goes here 
-        self.days_frame=ttk.Frame(self,bootstyle='Dark')
-        self.rectangle_image=ttk.PhotoImage(file='images/rectangle.png')
-        self.days_image=ttk.PhotoImage(file='images/days.png')
-        ttk.Label(self,background='black',image=self.rectangle_image).place(x=240,y=93)
-        ttk.Label(self,background='white',image=self.days_image).place(x=480,y=120)
-        ttk.Label(self,background='white',image=self.days_image).place(x=630,y=120)
-        ttk.Label(self,background='white',image=self.days_image).place(x=780,y=120)
-        ttk.Label(self,background='white',image=self.days_image).place(x=930,y=120)
-        ttk.Label(self,background='white',image=self.days_image).place(x=1070,y=120)
-        ttk.Label(self,background='white',image=self.days_image).place(x=1230,y=120)
-        self.days_frame.place(x=240,y=90,width=1130,height=220)
 
         # time a timezone 
         ttk.Label(self,background="#17a2b8",font=('Helvitica',20,'bold'),textvariable=self.current_time_var).place(x=20,y=20)
@@ -129,6 +119,18 @@ class PepiniereWeather(ttk.Frame):
         self.wind_widget.config(text=f'{self.wind} m/s')
         self.description_widget.config(text=self.description)
 
+
+class MapPepiniere(ttk.Frame):
+    def __init__(self,parent):
+        super().__init__(parent)
+        ## my map goes here
+        self.image_pep=ttk.PhotoImage(file='images/image_pepiniere.png')
+        map_widget = tkintermapview.TkinterMapView(self, width=800, height=270, corner_radius=6)
+        map_widget.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.marker= map_widget.set_position(34.1526870 ,-4.1425412,marker=True,text='pepiniere z',image=(self.image_pep),image_zoom_visibility=(0, float('inf')))
+        self.marker_2 = map_widget.set_marker(34.2436967 ,-4.6311753 ,text='pepiniere x')
+        self.marker_3 = map_widget.set_marker(33.8662319 ,-4.6394151,text='pepiniere y')  
+        map_widget.set_zoom(10)
 
 
    
