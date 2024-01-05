@@ -56,13 +56,26 @@ class PepiniereWeather(ttk.Frame):
         self.city_var=ttk.StringVar()
         self.timezone_var=ttk.StringVar()
         self.long_lat_var=ttk.StringVar()
+        self.current_time_var=ttk.StringVar()
         #weather data here
-        ttk.Label(self,background='black').place(x=10,y=80,width=200,height=160)
+            #backgrounds
+        ttk.Label(self,background='black').place(x=4,y=80,width=235,height=160)
         ttk.Label(self,text='temperature',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=90)
         ttk.Label(self,text='humidity',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=120)
         ttk.Label(self,text='pressure',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=150)
         ttk.Label(self,text='wind speed',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=180)
-        ttk.Label(self,text='descreption',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=210) 
+        ttk.Label(self,text='descreption',font=('Helvitica',11),foreground='white',background='black').place(x=14,y=210)
+            #datahere
+        self.temp_widget=ttk.Label(self,font=('Helvitica',11),foreground='white',background='black')
+        self.temp_widget.place(x=120,y=90)
+        self.humidity_widget=ttk.Label(self,font=('Helvitica',11),foreground='white',background='black')
+        self.humidity_widget.place(x=120,y=120)
+        self.pressure_widget=ttk.Label(self,font=('Helvitica',11),foreground='white',background='black')
+        self.pressure_widget.place(x=120,y=150)
+        self.wind_widget=ttk.Label(self,font=('Helvitica',11),foreground='white',background='black')
+        self.wind_widget.place(x=120,y=180)
+        self.description_widget=ttk.Label(self,font=('Helvitica',11),foreground='white',background='black')
+        self.description_widget.place(x=120,y=210)
         #search box goes here
         ttk.Label(self,background='black').place(x=550,y=40,width=400,height=45)
         self.cloud=ttk.PhotoImage(file='images/cloud.png')
@@ -74,19 +87,19 @@ class PepiniereWeather(ttk.Frame):
         self.days_frame=ttk.Frame(self,bootstyle='Dark')
         self.rectangle_image=ttk.PhotoImage(file='images/rectangle.png')
         self.days_image=ttk.PhotoImage(file='images/days.png')
-        ttk.Label(self,background='black',image=self.rectangle_image).place(x=233,y=93)
+        ttk.Label(self,background='black',image=self.rectangle_image).place(x=240,y=93)
         ttk.Label(self,background='white',image=self.days_image).place(x=480,y=120)
         ttk.Label(self,background='white',image=self.days_image).place(x=630,y=120)
         ttk.Label(self,background='white',image=self.days_image).place(x=780,y=120)
         ttk.Label(self,background='white',image=self.days_image).place(x=930,y=120)
         ttk.Label(self,background='white',image=self.days_image).place(x=1070,y=120)
         ttk.Label(self,background='white',image=self.days_image).place(x=1230,y=120)
-        self.days_frame.place(x=230,y=90,width=1130,height=220)
+        self.days_frame.place(x=240,y=90,width=1130,height=220)
 
         # time a timezone 
-        ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',20,'bold')).place(x=20,y=20)
-        ttk.Label(self,background="#17a2b8",font=('Helvitica',11),textvariable=self.timezone_var).place(x=100,y=30)
-        ttk.Label(self,background="#17a2b8",font=('Helvitica',11),textvariable=self.long_lat_var).place(x=220,y=30)
+        ttk.Label(self,background="#17a2b8",font=('Helvitica',20,'bold'),textvariable=self.current_time_var).place(x=20,y=20)
+        ttk.Label(self,background="#17a2b8",font=('Helvitica',11),textvariable=self.timezone_var).place(x=200,y=30)
+        ttk.Label(self,background="#17a2b8",font=('Helvitica',11),textvariable=self.long_lat_var).place(x=350,y=30)
         ##methodes 
     def getweather(self):
         city =self.city_var.get()
@@ -95,7 +108,27 @@ class PepiniereWeather(ttk.Frame):
         timezone_=TimezoneFinder()
         result=timezone_.timezone_at(lng=location.longitude,lat=location.latitude)
         self.timezone_var.set(result)
-        self.long_lat_var.set(f'{round(location.latitude,4)} °N {round(location.longitude,4)} °W')
+        self.long_lat_var.set(f'{round(location.latitude,2)} °N {round(location.longitude,2)} °W')
+        home=pytz.timezone(result)
+        local_time=datetime.now(home)
+        cuurent_time=local_time.strftime("%I:%M %p")
+        self.current_time_var.set(cuurent_time)
+        ## weather API
+        self.api=f"https://api.openweathermap.org/data/2.5/weather?lat={location.latitude}&lon={location.longitude}&appid=69442d50acf30fce3842a661f12b0ed9"
+        self.data=requests.get(self.api).json()
+        self.temp_k=self.data['main']['temp']
+        self.temp_c=round(float(self.temp_k)-274.15,2)
+        self.pressure=self.data['main']['pressure']
+        self.humidity=self.data['main']['humidity']
+        self.wind=self.data['wind']['speed']
+        self.description=self.data['weather'][0]['description']
+        ## insertind data in weather widgets
+        self.temp_widget.config(text=f'{self.temp_c} °C')
+        self.pressure_widget.config(text=f'{self.pressure} hpa')
+        self.humidity_widget.config(text=f'{self.humidity} %')
+        self.wind_widget.config(text=f'{self.wind} m/s')
+        self.description_widget.config(text=self.description)
+
 
 
    
@@ -103,4 +136,3 @@ class PepiniereWeather(ttk.Frame):
 
 
 App().mainloop()
-        
