@@ -63,8 +63,26 @@ class PepiniereWeather(ttk.Frame):
         ttk.Label(self,background='black').place(x=550,y=40,width=400,height=45)
         self.cloud=ttk.PhotoImage(file='images/cloud.png')
         ttk.Label(self,background='black',image=self.cloud).place(x=555,y=40)
-        self.search_entry=ttk.Entry(self,font=('popins',11,'bold'),width=30,foreground='black',justify='center')
-        self.search_entry.place(x=630,y=47)
+        ttk.Entry(self,font=('popins',11,'bold'),width=30,foreground='black',justify='center').place(x=630,y=47)
+        self.search_icon=ttk.PhotoImage(file='images/search.png')
+        ttk.Button(self,image=self.search_icon,bootstyle='Dark',cursor='hand2').place(x=895,y=43)
+        # days stuff goes here 
+        self.days_frame=ttk.Frame(self,bootstyle='Dark')
+        self.rectangle_image=ttk.PhotoImage(file='images/rectangle.png')
+        self.days_image=ttk.PhotoImage(file='images/days.png')
+        ttk.Label(self,background='black',image=self.rectangle_image).place(x=233,y=93)
+        ttk.Label(self,background='white',image=self.days_image).place(x=480,y=120)
+        ttk.Label(self,background='white',image=self.days_image).place(x=630,y=120)
+        ttk.Label(self,background='white',image=self.days_image).place(x=780,y=120)
+        ttk.Label(self,background='white',image=self.days_image).place(x=930,y=120)
+        ttk.Label(self,background='white',image=self.days_image).place(x=1070,y=120)
+        ttk.Label(self,background='white',image=self.days_image).place(x=1230,y=120)
+        self.days_frame.place(x=230,y=90,width=1130,height=220)
+
+        # time a timezone 
+        ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',20,'bold')).place(x=20,y=20)
+        ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',11)).place(x=100,y=30)
+        ttk.Label(self,text='3:5',background="#17a2b8",font=('Helvitica',11)).place(x=180,y=30)
    
 
 
