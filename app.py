@@ -1,4 +1,5 @@
 import ttkbootstrap as ttk
+from ttkbootstrap.tableview import Tableview
 import tkintermapview
 from ttkbootstrap.constants import *
 from PIL import Image,ImageTk
@@ -27,16 +28,18 @@ class MyTabs(ttk.Notebook):
         super().__init__(parent,**kyw)
         #main tabs
         self.pepiniere=ttk.Frame(self)
-        self.controle=ttk.Frame(self)
+        self.personnel=ttk.Frame(self)
         self.suivie=ttk.Frame(self)
         self.calendrier=ttk.Frame(self)
         self.add(self.pepiniere,text='                                                 pepiniere                                                 ')
-        self.add(self.controle,text='                                                controle                                                ')
+        self.add(self.personnel,text='                                                personnel                                                ')
         self.add(self.suivie,text='                                                suivie                                                ')
         self.add(self.calendrier,text='                                                calendrier                                                ')
         self.pack(fill=BOTH,expand=True )
         #pepiniere tab
         Pepiniere(self.pepiniere)
+        #personnel tab
+        Personnel(self.personnel)
 
 
 class Pepiniere(ttk.Frame):
@@ -133,7 +136,39 @@ class MapPepiniere(ttk.Frame):
         map_widget.set_zoom(10)
 
 
-   
+class Personnel(ttk.Frame):
+    def __init__(self,parent):
+        super().__init__(parent)
+        self.columnconfigure(0,weight=1)
+        self.rowconfigure(0,weight=1)
+        self.rowconfigure(1,weight=1)
+        self.pack(fill=BOTH,expand=True )
+        Staff(self).grid(column=0,row=0,sticky='nsew')
+        
+
+class Staff(ttk.Frame):
+    def __init__(self,parent):
+        super().__init__(parent)
+        self.columnconfigure(0,weight=1)
+        self.columnconfigure(2,weight=1)
+        self.columnconfigure(3,weight=1)
+        self.columnconfigure(4,weight=1)
+
+        self.columnconfigure(1,weight=1)
+        self.staff_coldata=['ID','NOM COMPLET','TELEPHONE','SALAIRE','FONCTION','EMAIL']
+        self.staff_rowdata=[]
+        self.staff_table=Tableview(master=self,
+                             coldata=self.staff_coldata,
+                             rowdata=self.staff_rowdata,
+                             searchable=True,
+                             bootstyle=PRIMARY,
+                             autofit=True
+                             )
+        self.staff_table.grid(column=4,row=0,sticky='nsw',padx=30, pady=20)
+        self.data_entry=ttk.Labelframe(self)
+        self.data_entry.grid(column=3,row=0,sticky='nsew')
+        ttk.Label(self.data_entry,text='update').pack()
+ 
 
 
 
